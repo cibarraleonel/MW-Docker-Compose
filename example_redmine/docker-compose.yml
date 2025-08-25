@@ -11,7 +11,7 @@ services:
       - db_data:/var/lib/mysql
 
   redmine:
-    image: redmine
+    build: .
     restart: always
     ports:
       - "8080:3000"
@@ -22,7 +22,17 @@ services:
       REDMINE_DB_DATABASE: redmine
     volumes:
       - redmine_data:/usr/src/redmine/files
+      - ./configuration.yml:/usr/src/redmine/config/configuration.yml
+      - redmine_plugins:/usr/src/redmine/plugins
+
+  maildev:
+    image: maildev/maildev
+    restart: always
+    ports:
+      - "1080:1080"   # interfaz web
+      - "1025:1025"   # puerto SMTP
 
 volumes:
   db_data:
   redmine_data:
+  redmine_plugins:
